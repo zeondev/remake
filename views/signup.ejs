@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+  <%- include("partials/navbar") %>
+  <section class="signup">
+    <h1 style="margin-bottom: 5px; font-size: 35px;">Welcome to Zeon!</h1>
+    <p class="muted" style="margin-top: 5px;">Let's get you started.</p>
+    <input type="text" placeholder="Username..." id="username">
+    <input type="email" placeholder="Email..." id="email">
+    <input type="password" placeholder="Password..." id="password">
+    <a ><button onclick="register()">Create Account</button></a>
+    <span style="text-align: center;">Don't want to signup?<br><a style="color: #f1f1f1; text-decoration: none;"
+        href="/login">Log in
+        with
+        an account</a></span>
+  </section>
+  <script src="script.js"></script>
+  <script>
+    async function register() {
+      let post = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+          "username": document.querySelector("#username").value,
+          "email": document.querySelector("#email").value,
+          "password": document.querySelector("#password").value
+        })
+      })
+      let accinfo = await post.json()
+      console.log(accinfo)
+      if (accinfo.status == 200) {
+        // setCookie("zeonsession", btoa(JSON.stringify({info: accinfo.info, token: accinfo.token})), 30)
+        location.pathname = "/"
+      }
+    }
+  </script>
+</body>
+
+</html>

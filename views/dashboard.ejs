@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+  <%- include("partials/navbar") %>
+  <section class="dashboard">
+    <!-- <h1>We are Zeon.</h1> -->
+    <!-- <p>Creating applications for everyone</p> -->
+    <!-- <a href="/signup"><button>Get Started</button></a> -->
+    <div class="card">
+        <span style="margin-bottom: 10px;">Actions</span>
+        <br>
+        <!-- <br> -->
+        <button onclick='fetch("/api/logout",{method: "POST"})'>Log Out</button>
+    </div>
+    <div class="card">
+        <span>Bio</span>
+        <br>
+        <textarea type="text" id="bio" placeholder="Bio"></textarea>
+        <br>
+        <button id="update">Update Info</button>
+    </div>
+  </section>
+  <script src="script.js"></script>
+  <script>
+    (async () => {
+        let valtoken = await fetch("/api/userInfo", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        })
+        // console.log(await post.json())
+        let result = await valtoken.json()
+        console.log(result)
+        document.querySelector("#bio").value = JSON.parse(result.response.EXTRAINFO).bio
+
+        document.querySelector("#update").addEventListener("click", async () => {
+            let valtoken = await fetch("/api/update/bio", {
+                method: "POST",
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({bio: document.querySelector("#bio").value})
+            })
+            // console.log(await post.json())
+            let result = await valtoken.text()
+        })
+    })()
+
+    
+  </script>
+</body>
+
+</html>
